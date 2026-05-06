@@ -2618,7 +2618,7 @@ bool WebPanelServer::start() {
   redirect_config.backlog_conn = 0;
   redirect_config.recv_wait_timeout = 10;
   redirect_config.send_wait_timeout = 10;
-  redirect_config.httpd.lru_purge_enable = true;
+  redirect_config.lru_purge_enable = true;
   redirect_config.stack_size = kWebServerStackSize;
   redirect_config.task_priority = tskIDLE_PRIORITY + 2;
   redirect_config.core_id = 0;
