@@ -969,7 +969,7 @@ const char kWebPanelAppHtml[] PROGMEM = R"HTML(
 	            </div>
 	          </div>
 	          <div class="panel-note">Only two brokers can be enabled at the same time.</div>
-	          <div id="mqttBrokerWarning" class="panel-warning"></div>
+	          <div id="mqttBrokerWarning" class="panel-warning">MQTT IATA is unset. Set it before enabling MeshCoreTel or LetsMesh brokers.</div>
 	        </div>
 	      </div>
 	    </section>
@@ -2075,9 +2075,7 @@ const char kWebPanelAppHtml[] PROGMEM = R"HTML(
         banner.classList.toggle("visible", showWarning && !isStatsPage);
       }
       if (inlineWarning) {
-        inlineWarning.textContent = showWarning
-          ? "MQTT IATA is unset. Set it before enabling MeshCoreTel or LetsMesh brokers."
-          : "";
+        inlineWarning.style.display = showWarning ? "" : "none";
       }
     }
     function queueCommand(task) {
