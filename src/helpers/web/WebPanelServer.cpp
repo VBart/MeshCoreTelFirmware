@@ -423,6 +423,9 @@ const char kWebPanelAppHtml[] PROGMEM = R"HTML(
     button.action-caution:hover { background:linear-gradient(135deg,#c75656,#e57b70); }
     button.action-dreamy { background:linear-gradient(135deg,#4e7ac7,#8b7cf6); color:#f7f7ff; border:none; }
     button.action-dreamy:hover { background:linear-gradient(135deg,#5c89d4,#9a8cff); }
+    .btn-split { display:flex; }
+    .btn-split button:first-child { border-radius:10px 0 0 10px; }
+    .btn-split button:last-child  { border-radius:0 10px 10px 0; border-left:1px solid rgba(255,255,255,.25); width:52px; text-align:center; padding-left:0; padding-right:0; }
     .stack { display:grid; gap:12px; }
     .field-card { display:grid; gap:10px; }
     .section-group { background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:14px; display:grid; gap:12px; }
@@ -586,7 +589,10 @@ const char kWebPanelAppHtml[] PROGMEM = R"HTML(
         <div class="actions-group center">
           <button id="advertBtn" class="action-advert">Advert</button>
           <button id="otaBtn" class="action-dreamy">Start OTA</button>
-          <button id="refreshPageBtn" class="action-dreamy">Refresh</button>
+          <div class="btn-split" id="refreshSplitGroup">
+            <button id="refreshPageBtn" class="action-dreamy">Refresh</button>
+            <button id="autoRefreshBtn" class="action-dreamy">↻</button>
+          </div>
         </div>
         <div class="actions-group right">
           <button id="rebootBtn" class="action-caution">Reboot</button>
@@ -1056,7 +1062,7 @@ const char kWebPanelAppHtml[] PROGMEM = R"HTML(
       const centerGroup = document.querySelector("#actionsPanel .actions-group.center");
       const advertBtn = document.getElementById("advertBtn");
       const otaBtn = document.getElementById("otaBtn");
-      const refreshBtn = document.getElementById("refreshPageBtn");
+      const refreshSplitGroup = document.getElementById("refreshSplitGroup");
       if (appBtn) {
         appBtn.classList.toggle("active", !isStatsPage);
         appBtn.title = "Open app page";
@@ -1069,12 +1075,7 @@ const char kWebPanelAppHtml[] PROGMEM = R"HTML(
       }
       if (advertBtn) advertBtn.style.display = isStatsPage ? "none" : "";
       if (otaBtn) otaBtn.style.display = isStatsPage ? "none" : "";
-      if (refreshBtn) refreshBtn.style.display = isStatsPage ? "" : "none";
-      if (centerGroup) {
-        centerGroup.style.gridTemplateColumns = isStatsPage
-          ? "1fr"
-          : "repeat(2,minmax(0,1fr))";
-      }
+      if (refreshSplitGroup) refreshSplitGroup.style.display = isStatsPage ? "" : "none";
     }
     function toggleTheme() {
       const next = rootEl.dataset.theme === "dark" ? "light" : "dark";
@@ -2513,11 +2514,39 @@ const char kWebPanelAppHtml[] PROGMEM = R"HTML(
         await runCommand("start ota");
       }
     };
+    const AUTO_REFRESH_INTERVAL = 60;
+    let autoRefreshCountdown = 0;
+    let autoRefreshTimer = null;
     document.getElementById("refreshPageBtn").onclick = async () => {
       if (isStatsPage) {
+        if (autoRefreshTimer) {
+          autoRefreshCountdown = AUTO_REFRESH_INTERVAL;
+          document.getElementById("autoRefreshBtn").textContent = `${autoRefreshCountdown}s`;
+        }
         await loadStatsPage();
       } else {
         await initApp();
+      }
+    };
+    document.getElementById("autoRefreshBtn").onclick = () => {
+      const btn = document.getElementById("autoRefreshBtn");
+      if (autoRefreshTimer) {
+        btn.textContent = "↻";
+        clearInterval(autoRefreshTimer);
+        autoRefreshTimer = null;
+      } else {
+        autoRefreshCountdown = AUTO_REFRESH_INTERVAL;
+        btn.textContent = `${autoRefreshCountdown}s`
+        autoRefreshTimer = setInterval(async () => {
+          autoRefreshCountdown--;
+          if (autoRefreshCountdown <= 0) {
+            autoRefreshCountdown = AUTO_REFRESH_INTERVAL;
+            btn.textContent = `${autoRefreshCountdown}s`;
+            await loadStatsPage();
+          } else {
+            btn.textContent = `${autoRefreshCountdown}s`;
+          }
+        }, 1000);
       }
     };
     document.getElementById("logoutBtn").onclick = () => {
