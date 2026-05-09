@@ -37,7 +37,7 @@ struct HistorySample {
   uint8_t gps_satellites;
   uint8_t flags;
   int8_t battery_pct;
-  uint8_t reserved;
+  uint8_t load_avg1_pct;
 };
 
 struct HistoryEvent {

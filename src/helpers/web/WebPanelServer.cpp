@@ -1778,6 +1778,7 @@ const char kWebPanelAppHtml[] PROGMEM = R"HTML(
       if (!Number.isFinite(value)) return "--";
       if (key === "battery") return Math.round(value) + " mV";
       if (key === "voltage") return (value / 100).toFixed(2) + " V";
+      if (key === "cpu_load") return Math.round(value) + " %";
       if (key === "memory") return formatBytes(value);
       if (key === "packets") return Math.round(value) + " pkts";
       if (key === "error_rate") return (value / 10).toFixed(1) + " %";
@@ -1817,6 +1818,7 @@ const char kWebPanelAppHtml[] PROGMEM = R"HTML(
         if (recent >= 750) return "#d7a531";  // high
         return "#2f8f4e";                     // normal
       }
+      if (key === "cpu_load") return "#e07b39";
       if (key === "error_rate") return "#ef4444";
       if (key === "gps_satellites") return "#2f8f4e";
       if (key === "signal") return "#3b82f6";
@@ -1836,6 +1838,9 @@ const char kWebPanelAppHtml[] PROGMEM = R"HTML(
       return baseColor || "#2f8f4e";
     }
     function sparkValueRange(key, values) {
+      if (key === "cpu_load") {
+        return { min: 0, max: Math.max(10, ...values) };
+      }
       if (key === "packets" || key === "gps_satellites") {
         const maxValue = Math.max(1, ...values);
         return { min:0, max:maxValue };
@@ -2086,9 +2091,9 @@ const char kWebPanelAppHtml[] PROGMEM = R"HTML(
       const sensors = summaryPayload && summaryPayload.sensors ? summaryPayload.sensors : null;
       const gpsEnabled = !!(sensors && sensors.gps_enabled === true);
       const mcuTempPresent = !!(sensors && Number.isFinite(sensors.mcu_temp_c));
-      const order = ["battery", "memory", "packets", "error_rate", "signal", "noise_floor"];
+      const order = ["battery", "cpu_load", "memory", "packets", "error_rate", "signal", "noise_floor"];
       if (mcuTempPresent) {
-        order.splice(2, 0, "mcu_temp");
+        order.splice(1, 0, "mcu_temp");
       }
       if (gpsEnabled) {
         order.push("gps_satellites");

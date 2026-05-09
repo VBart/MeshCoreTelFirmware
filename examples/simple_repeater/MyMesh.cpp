@@ -1941,6 +1941,7 @@ void MyMesh::updateStatsHistory(unsigned long now_ms) {
       sample.heap_min = ESP.getMinFreeHeap();
       sample.psram_free = ESP.getFreePsram();
       sample.psram_min = ESP.getMinFreePsram();
+      sample.load_avg1_pct = (uint8_t)(_cpu_tracker.getLoadAvg1() * 100.0f + 0.5f);
 #endif
       if (board.isExternalPowered()) sample.flags |= HISTORY_FLAG_EXTERNAL_POWER;
       if (board.isCharging()) sample.flags |= HISTORY_FLAG_CHARGING;

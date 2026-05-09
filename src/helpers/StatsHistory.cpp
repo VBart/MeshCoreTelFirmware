@@ -211,6 +211,10 @@ bool buildPointValue(const HistorySample& sample, const HistorySample* previous,
     value = static_cast<int>(sample.battery_mv);
     return true;
   }
+  if (strcmp(series, "cpu_load") == 0) {
+    value = static_cast<int>(sample.load_avg1_pct);
+    return true;
+  }
   if (strcmp(series, "memory") == 0) {
     value = static_cast<int>(sample.heap_free);
     return true;
@@ -309,6 +313,9 @@ const char* seriesTitle(const char* series) {
   if (strcmp(series, "battery") == 0) {
     return "Battery";
   }
+  if (strcmp(series, "cpu_load") == 0) {
+    return "CPU Load";
+  }
   if (strcmp(series, "memory") == 0) {
     return "Heap Free";
   }
@@ -354,6 +361,9 @@ const char* seriesTitle(const char* series) {
 const char* seriesUnit(const char* series) {
   if (strcmp(series, "battery") == 0) {
     return "mV";
+  }
+  if (strcmp(series, "cpu_load") == 0) {
+    return "pct";
   }
   if (strcmp(series, "memory") == 0) {
     return "bytes";
@@ -639,9 +649,10 @@ bool StatsHistory::parseSummaryLine(const char* line, HistorySample& sample) con
   long gps_lon_e6 = 0;
   unsigned sensor_flags = 0;
   unsigned gps_satellites = 0;
+  unsigned load_avg1_pct = 0;
 
   int parsed = sscanf(line,
-                      "%lu,%lu,%u,%u,%d,%d,%d,%lu,%lu,%lu,%lu,%u,%u,%u,%u,%u,%u,%u,%d,%d,%u,%u,%d,%d,%ld,%ld,%u,%u",
+                      "%lu,%lu,%u,%u,%d,%d,%d,%lu,%lu,%lu,%lu,%u,%u,%u,%u,%u,%u,%u,%d,%d,%u,%u,%d,%d,%ld,%ld,%u,%u,%u",
                       &epoch_secs,
                       &uptime_secs,
                       &battery_mv,
@@ -669,8 +680,9 @@ bool StatsHistory::parseSummaryLine(const char* line, HistorySample& sample) con
                       &gps_lat_e6,
                       &gps_lon_e6,
                       &sensor_flags,
-                      &gps_satellites);
-  if (parsed == 28) {
+                      &gps_satellites,
+                      &load_avg1_pct);
+  if (parsed == 29 || parsed == 28) {
     memset(&sample, 0, sizeof(sample));
     sample.epoch_secs = static_cast<uint32_t>(epoch_secs);
     sample.uptime_secs = static_cast<uint32_t>(uptime_secs);
@@ -703,6 +715,7 @@ bool StatsHistory::parseSummaryLine(const char* line, HistorySample& sample) con
     sample.gps_satellites = static_cast<uint8_t>(gps_satellites);
     sample.flags = static_cast<uint8_t>(flags);
     sample.battery_pct = -1;
+    sample.load_avg1_pct = (parsed == 29) ? static_cast<uint8_t>(load_avg1_pct) : 0;
     return true;
   }
 
@@ -1087,7 +1100,7 @@ void StatsHistory::flushSummaryLog() {
 
   char line[384];
   snprintf(line, sizeof(line),
-           "%lu,%lu,%u,%u,%d,%d,%d,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%d,%d,%u,%u,%d,%d,%ld,%ld,%u,%u\n",
+           "%lu,%lu,%u,%u,%d,%d,%d,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%d,%d,%u,%u,%d,%d,%ld,%ld,%u,%u,%u\n",
            static_cast<unsigned long>(latest.epoch_secs),
            static_cast<unsigned long>(latest.uptime_secs),
            static_cast<unsigned>(latest.battery_mv),
@@ -1115,7 +1128,8 @@ void StatsHistory::flushSummaryLog() {
            static_cast<long>(latest.gps_lat_e6),
            static_cast<long>(latest.gps_lon_e6),
            static_cast<unsigned>(latest.sensor_flags),
-           static_cast<unsigned>(latest.gps_satellites));
+           static_cast<unsigned>(latest.gps_satellites),
+           static_cast<unsigned>(latest.load_avg1_pct));
 
   File latest_file = openArchiveWriteWithRecovery(_archive, kSummaryLatestPath);
   if (!latest_file) {
