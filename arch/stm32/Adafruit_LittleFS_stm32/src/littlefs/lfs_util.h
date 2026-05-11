@@ -168,6 +168,9 @@ void lfs_crc(uint32_t *crc, const void *buffer, size_t size);
 // Allocate memory, only used if buffers are not provided to littlefs
 static inline void *lfs_malloc(size_t size) {
 #ifndef LFS_NO_MALLOC
+    if (size == 0) {
+        return NULL;
+    }
     //extern void *pvPortMalloc( size_t xWantedSize );
     //return pvPortMalloc(size);
     return malloc(size);
