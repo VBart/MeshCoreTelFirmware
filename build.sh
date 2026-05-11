@@ -152,7 +152,9 @@ build_firmware() {
   ENV_PLATFORM=($(get_platform_for_env $1))
 
   # get git commit sha
-  COMMIT_HASH=$(git rev-parse --short HEAD)
+  if [ -z "$COMMIT_HASH" ]; then
+    COMMIT_HASH=$(git rev-parse --short HEAD)
+  fi
 
   # set firmware build date
   FIRMWARE_BUILD_DATE=$(date '+%d-%b-%Y')
