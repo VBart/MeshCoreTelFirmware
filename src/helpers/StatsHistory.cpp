@@ -229,8 +229,7 @@ bool buildPointValue(const HistorySample& sample, const HistorySample* previous,
   }
   if (strcmp(series, "packets") == 0) {
     if (previous == nullptr) {
-      value = 0;
-      return true;
+      return false;
     }
     const uint32_t curr_total = sample.packets_sent + sample.packets_recv;
     const uint32_t prev_total = previous->packets_sent + previous->packets_recv;
@@ -1345,25 +1344,26 @@ bool StatsHistory::buildSeriesJson(const char* series, char* buffer, size_t buff
   size_t valid_emitted = 0;
   have_previous = false;
   if (strcmp(series, "packets") == 0) {
-    for (size_t i = 0; i < _sample_count && emitted < points; i += step, ++emitted) {
-      if (!getSampleFromOldest(i, sample)) {
-        break;
+    if (_sample_count >= 1 && getSampleFromOldest(0, previous)) {
+      for (size_t i = step; i < _sample_count && emitted < points; i += step, ++emitted) {
+        if (!getSampleFromOldest(i, sample)) {
+          break;
+        }
+        const int rx = sample.packets_recv >= previous.packets_recv
+          ? (int)(sample.packets_recv - previous.packets_recv) : 0;
+        const int tx = sample.packets_sent >= previous.packets_sent
+          ? (int)(sample.packets_sent - previous.packets_sent) : 0;
+        offset += snprintf(&buffer[offset], buffer_size - offset,
+                          "%s[%lu,%d,%d]",
+                          valid_emitted == 0 ? "" : ",",
+                          static_cast<unsigned long>(sample.uptime_secs),
+                          rx, tx);
+        valid_emitted++;
+        if (offset + 40 >= buffer_size) {
+          break;
+        }
+        previous = sample;
       }
-      const int rx = (have_previous && sample.packets_recv >= previous.packets_recv)
-        ? (int)(sample.packets_recv - previous.packets_recv) : 0;
-      const int tx = (have_previous && sample.packets_sent >= previous.packets_sent)
-        ? (int)(sample.packets_sent - previous.packets_sent) : 0;
-      offset += snprintf(&buffer[offset], buffer_size - offset,
-                         "%s[%lu,%d,%d]",
-                         valid_emitted == 0 ? "" : ",",
-                         static_cast<unsigned long>(sample.uptime_secs),
-                         rx, tx);
-      valid_emitted++;
-      if (offset + 40 >= buffer_size) {
-        break;
-      }
-      previous = sample;
-      have_previous = true;
     }
   } else {
     for (size_t i = 0; i < _sample_count && emitted < points; i += step, ++emitted) {
