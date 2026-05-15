@@ -411,13 +411,13 @@ const char kWebPanelAppHtml[] PROGMEM = R"HTML(
     input:not([type="checkbox"]), textarea, select, button { -webkit-appearance:none; appearance:none; }
     textarea { min-height:100px; resize:vertical; }
     button { width:auto; cursor:pointer; background:var(--accent); color:var(--button-text); border:none; font-weight:700; transition:background .2s ease,color .2s ease,border-color .2s ease; }
-    button:hover { background:var(--accent-hover); }
+    button:not(:disabled):hover { background:var(--accent-hover); }
     .row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
     .row-command { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:12px; align-items:center; }
     .row3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
     .quick { display:flex; flex-wrap:wrap; gap:10px; }
     .quick button, .iconbtn, .themebtn { background:var(--surface2); color:var(--button-secondary-text); border:1px solid var(--border); }
-    .quick button:hover, .iconbtn:hover, .themebtn:hover { background:var(--surface1); }
+    .quick button:hover, button.iconbtn:hover, button.themebtn:hover { background:var(--surface1); }
     button.action-advert { background:linear-gradient(135deg,#d97706,#f59e0b); color:#fff7ed; border:none; }
     button.action-advert:hover { background:linear-gradient(135deg,#ea8f17,#ffb938); }
     button.action-caution { background:linear-gradient(135deg,#b94747,#d66a5f); color:#fff5f5; border:none; }
@@ -437,7 +437,6 @@ const char kWebPanelAppHtml[] PROGMEM = R"HTML(
     .iconbtn { width:44px; padding:12px 0; }
     .placeholder-slot { display:block; width:44px; height:44px; }
     .savebtn { width:100%; background:var(--accent); color:var(--button-text); border:none; }
-    .savebtn:not(:disabled):hover { background:var(--accent-hover); }
     .savebtn:disabled { opacity:0.45; cursor:not-allowed; }
     .broker-stack { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,2fr); gap:12px; align-items:start; }
     .broker-group { display:grid; gap:8px; align-content:start; }
