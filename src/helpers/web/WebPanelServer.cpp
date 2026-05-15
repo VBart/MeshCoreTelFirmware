@@ -2074,7 +2074,7 @@ const char kWebPanelAppHtml[] PROGMEM = R"HTML(
       }
       const rangeEl = document.getElementById("head-range-" + key);
       if (rangeEl && points.length) {
-        const values = points.map((p) => p[1]).filter((v) => Number.isFinite(v));
+        const values = points.map(key === "packets" ? ((p) => p[1] + p[2]) : ((p) => p[1])).filter((v) => Number.isFinite(v));
         if (values.length) {
           rangeEl.textContent = "min " + formatTrendValue(key, Math.min(...values), false) + " / max " + formatTrendValue(key, Math.max(...values), false);
         }
