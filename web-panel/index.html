@@ -565,7 +565,18 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Настройки ретранслятора
+        Информация
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ota" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Обновление прошивки (OTA)
       
     </span>
   </a>
@@ -576,7 +587,7 @@
   <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Информация
+        Настройки ретранслятора
       
     </span>
   </a>
@@ -690,10 +701,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ota" class="md-nav__link">
+  <a href="#ota_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Запуск OTA
+        Дистанционное обновление прошивки (OTA)
       
     </span>
   </a>
@@ -1082,7 +1093,18 @@
   <a href="#_8" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Настройки ретранслятора
+        Информация
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ota" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Обновление прошивки (OTA)
       
     </span>
   </a>
@@ -1093,7 +1115,7 @@
   <a href="#_9" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Информация
+        Настройки ретранслятора
       
     </span>
   </a>
@@ -1207,10 +1229,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#ota" class="md-nav__link">
+  <a href="#ota_1" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Запуск OTA
+        Дистанционное обновление прошивки (OTA)
       
     </span>
   </a>
@@ -1445,7 +1467,6 @@
 <ul>
 <li>навигацию: <code>App</code> и <code>Stats</code></li>
 <li><code>Advert</code> (Объявление)</li>
-<li><code>Start OTA</code> (Запустить OTA)</li>
 <li><code>Reboot</code> (Перезагрузка)</li>
 <li>переключатель темы</li>
 <li><code>Logout</code> (Выход)</li>
@@ -1457,8 +1478,9 @@
 <ul>
 <li>навигацию: <code>App</code> и <code>Stats</code></li>
 <li><code>Refresh</code> (Обновить)</li>
+<li>переключатель автообновления <code>↻</code></li>
 <li><code>Reboot</code> (Перезагрузка)</li>
-<li>переключатель темы</li>
+<li>переключатель темы <code>☀</code>/<code>☾</code></li>
 <li><code>Logout</code> (Выход)</li>
 </ul>
 <h2 id="get">Быстрые команды "get"<a class="headerlink" href="#get" title="Permanent link">&para;</a></h2>
@@ -1478,7 +1500,19 @@
 <li>авторизованные сессии могут выполнять те же команды CLI, которые принимает ретранслятор</li>
 </ul>
 <p>Это позволяет легко увидеть, что именно панель отправила ретранслятору.</p>
-<h2 id="_8">Настройки ретранслятора<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<h2 id="_8">Информация<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<p>В этом разделе отображается:</p>
+<ul>
+<li><code>Hardware</code>: модель устройства</li>
+<li><code>Firmware</code>: версия прошивки с датой сборки</li>
+<li><code>Public Key</code> (Публичный ключ)</li>
+</ul>
+<h2 id="ota">Обновление прошивки (OTA)<a class="headerlink" href="#ota" title="Permanent link">&para;</a></h2>
+<p>Этот раздел позволяет безопасно загружать прошивку на устройство по Wi-Fi.</p>
+<p>Чтобы перепрошить устройство, нажмите на поле выбора файла и выберите файл прошивки с расширением <code>.bin</code>, при этом кнопка <code>Upload</code> активируется.
+Нажмите кнопку <code>Upload</code> и после подтверждения начнётся загрузка прошивки с индикацией в процентах.</p>
+<p>После успешного завершения устройство автоматически перезагрузится с новой прошивкой.</p>
+<h2 id="_9">Настройки ретранслятора<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
 <p>Этот раздел включает:</p>
 <ul>
 <li>Имя устройства (Device Name)</li>
@@ -1498,13 +1532,6 @@
 <li>изменение приватного ключа требует перезагрузки для применения</li>
 <li>кнопки обновления загружают текущее значение с ретранслятора</li>
 <li>кнопки сохранения немедленно отправляют соответствующую команду CLI</li>
-</ul>
-<h2 id="_9">Информация<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h2>
-<p>В этом разделе отображается:</p>
-<ul>
-<li><code>Version</code>: версия прошивки с датой сборки</li>
-<li><code>Client Version</code>: строка версии MQTT-клиента</li>
-<li><code>Public Key</code> (Публичный ключ)</li>
 </ul>
 <h2 id="ghost-node-mode">Режим скрытого узла (Ghost Node Mode)<a class="headerlink" href="#ghost-node-mode" title="Permanent link">&para;</a></h2>
 <p>Режим скрытого узла — это удобный элемент управления на <code>/app</code> для ретранслятора, который должен оставаться в Wi-Fi и MQTT, но не должен активно вести себя как ещё один близлежащий ретранслятор.</p>
@@ -1550,7 +1577,7 @@
 <ul>
 <li><code>Services</code>: MQTT, web, архив, количество соседей и, если SD-карта смонтирована, ёмкость карты и архива</li>
 <li>опциональную полноширинную сводную карточку <code>Environment</code> на платах, передающих GPS или данные телеметрии окружающей среды</li>
-<li><code>Trends</code>: заряд батареи, свободная куча, пакетная активность, сигнал, уровень шума и, если включён GPS, спутники</li>
+<li><code>Trends</code>: заряд батареи, свободная память, пакетная активность (RX/TX в виде составного графика), частота ошибок приёма (RX error rate), сигнал, уровень шума, загрузка ядра процессора, температура MCU (с цветовой индикацией теплового порога) и, если включён GPS, спутники; карточки графиков показывают диапазон <code>min</code>/<code>max</code>, подсветка при наведении синхронизирована по всем графикам</li>
 <li><code>Neighbours</code>: текущая таблица соседей с ID, SNR, возрастом последнего приёма и возрастом объявления</li>
 <li><code>Events</code>: события текущей загрузки/сессии</li>
 </ul>
@@ -1563,6 +1590,8 @@
 <li>батарея</li>
 <li>память</li>
 <li>пакетная активность</li>
+<li>частота ошибок приёма</li>
+<li>загрузка ядра процессора</li>
 <li>сигнал</li>
 <li>спутники, когда GPS включён</li>
 </ol>
@@ -1647,12 +1676,13 @@
 <li>Нажмите <code>Save</code>.</li>
 <li>Используйте кнопку обновления, если хотите перечитать сохранённое значение с ретранслятора.</li>
 </ol>
-<h3 id="ota">Запуск OTA<a class="headerlink" href="#ota" title="Permanent link">&para;</a></h3>
+<h3 id="ota_1">Дистанционное обновление прошивки (OTA)<a class="headerlink" href="#ota_1" title="Permanent link">&para;</a></h3>
 <ol>
-<li>Нажмите <code>Start OTA</code>.</li>
-<li>Подтвердите действие.</li>
-<li>Локальный HTTP-редирект на порту <code>80</code> освобождается, чтобы OTA мог занять этот порт.</li>
-<li>Продолжите стандартную процедуру OTA.</li>
+<li>Откройте панель</li>
+<li>Найдите <code>Firmware Update</code> и нажмите на поле выбора файла</li>
+<li>Выберите файл с прошивкой <code>.bin</code></li>
+<li>Нажмите <code>Upload</code> и подтвердите действие</li>
+<li>Дождитесь загрузки прошивки и перезагрузки устройства</li>
 </ol>
 <h3 id="_14">Использование истории статистики<a class="headerlink" href="#_14" title="Permanent link">&para;</a></h3>
 <ol>
