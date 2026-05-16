@@ -166,6 +166,8 @@ curl -sk https://<repeater-ip>/api/stats \
 - `signal`
 - `noise_floor`
 - `packets`
+- `error_rate`
+- `core0_util`
 - `voltage`
 - `sensor_temp`
 - `humidity`

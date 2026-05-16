@@ -65,6 +65,8 @@ bash build.sh build-firmware heltec_v4_repeater_mqtt
 Это полные имена окружений PlatformIO, используемые для локальных сборок из исходников и для имён релизных файлов.
 
 ```text
+DIY_ESP32S3_N16R8_E22_Back2back_repeater_mqtt
+Ebyte_EoRa-S3_Repeater_mqtt
 Generic_E22_sx1262_repeater_mqtt
 Generic_E22_sx1268_repeater_mqtt
 Heltec_E213_repeater_mqtt
@@ -94,6 +96,8 @@ Station_G2_repeater_mqtt
 T_Beam_S3_Supreme_SX1262_repeater_mqtt
 Tbeam_SX1262_repeater_mqtt
 Tbeam_SX1276_repeater_mqtt
+ThinkNode_M2_Repeater_mqtt
+ThinkNode_M5_Repeater_mqtt
 WHY2025_badge_repeater_mqtt
 Xiao_C6_repeater_mqtt
 Xiao_S3_WIO_repeater_mqtt
