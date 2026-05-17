@@ -282,6 +282,7 @@ void NetworkService::ensureWifi(bool network_required) {
   if (!_wifi_started) {
     WiFi.mode(WIFI_STA);
     WiFi.setSleep(toEspPowerSave(_prefs.wifi_powersave));
+    sntp_servermode_dhcp(1);
     _wifi_started = true;
   }
 
@@ -297,7 +298,34 @@ void NetworkService::updateTimeSync() {
   }
 
   if (!_sntp_started) {
-    configTzTime("UTC0", "0.ru.pool.ntp.org", "ntp.ix.ru", "ntp21.vniiftri.ru");
+    setenv("TZ", "UTC0", 1);
+    tzset();
+
+    const ip_addr_t* dhcp_srv = sntp_getserver(0);
+    bool have_dhcp_ntp = dhcp_srv && !ip_addr_isany(dhcp_srv);
+
+    if (have_dhcp_ntp) {
+        sntp_setservername(1, "0.ru.pool.ntp.org");
+        sntp_setservername(2, "ntp.ix.ru");
+    } else {
+        sntp_setservername(0, "0.ru.pool.ntp.org");
+        sntp_setservername(1, "ntp.ix.ru");
+        sntp_setservername(2, "ntp21.vniiftri.ru");
+    }
+
+    sntp_init();
+
+#if WIFI_DEBUG_LOGGING && ARDUINO
+    for (int i = 0; i < SNTP_MAX_SERVERS; i++) {
+        const ip_addr_t* srv = sntp_getserver(i);
+        const char* name = sntp_getservername(i);
+        if (name)
+            Serial.printf("[NTP] server[%d] = %s\n", i, name);
+        else if (srv && !ip_addr_isany(srv))
+            Serial.printf("[NTP] server[%d] = %s (DHCP)\n", i, ipaddr_ntoa(srv));
+    }
+#endif
+
     _sntp_started = true;
   }
 
